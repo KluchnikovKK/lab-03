@@ -2,6 +2,7 @@
 #include <vector>
 
 using namespace std;
+
 vector<double>
 input_numbers(size_t count) {
     vector<double> result(count);
@@ -10,7 +11,9 @@ input_numbers(size_t count) {
     }
     return result;
 }
-void find_minmax(vector<double> numbers, double& min, double& max) {
+
+void
+find_minmax(vector<double> numbers, double& min, double& max) {
     min = numbers[0];
     max = numbers[0];
     for (double number : numbers) {
@@ -23,24 +26,10 @@ void find_minmax(vector<double> numbers, double& min, double& max) {
     }
 }
 
-
-int
-main() {
-    // Ввод данных
-    size_t number_count;
-    cerr << "Number count: ";
-    cin >> number_count;
-    cerr << "Numbers: ";
-    const auto numbers = input_numbers(number_count);
-
-    size_t bin_count;
-    cerr << "Enter column count: ";
-    cin >> bin_count;
-
-    // Обработка данных
+vector<size_t>
+make_histogram(size_t bin_count, const vector<double> &numbers) {
     double min, max;
     find_minmax(numbers, min, max);
-
     vector<size_t> bins(bin_count);
     for (double number : numbers) {
         size_t bin = (size_t)((number - min) / (max - min) * bin_count);
@@ -49,8 +38,11 @@ main() {
         }
         bins[bin]++;
     }
+    return bins;
+}
 
-    // Вывод данных
+void
+show_histogram_text(const vector<size_t>& bins){
     const size_t SCREEN_WIDTH = 80;
     const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
 
@@ -82,6 +74,26 @@ main() {
         }
         cout << '\n';
     }
+}
+
+int
+main() {
+    // Ввод данных
+    size_t number_count;
+    cerr << "Number count: ";
+    cin >> number_count;
+    cerr << "Numbers: ";
+    const auto numbers = input_numbers(number_count);
+
+    size_t bin_count;
+    cerr << "Enter column count: ";
+    cin >> bin_count;
+
+
+
+
+    vector<size_t> bins = make_histogram(bin_count, numbers);
+    show_histogram_text(bins);
 
     return 0;
 }
